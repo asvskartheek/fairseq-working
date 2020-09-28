@@ -11,7 +11,7 @@ IMPORTS=(
     wat-ilmpc.tar
 )
 
-LOCAL_ROOT="/root/model_checkpoints/"
+LOCAL_ROOT="/content/drive/My Drive/IIIT-H RA/Assignment 2/model_checkpoints/"
 REMOTE_ROOT="ada:/share1/dataset/text"
 
 
