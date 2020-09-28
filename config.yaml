@@ -17,10 +17,24 @@ corpora:
     # national-newscrawl:
     #     splits: ['train']
     #     langs: ['en', 'hi']
-    ufal-en-tam:
-        splits: ['train', 'test', 'dev']
-        langs: ['en', 'ta']
+    # ufal-en-tam:
+    #     splits: ['train', 'test', 'dev']
+    #     langs: ['en', 'ta']
+    # mechturk-en-te:
+    #     splits: ['train', 'dev', 'test']
+    #     langs: ['en', 'te']
+    complete-en-te:
+        splits: ['train', 'dev', 'test']
+        langs: ['en', 'te']
+    # pretrain-en-tam:
+    #     splits: ['train', 'dev']
+    #     langs: ['en', 'ta']
 
 dictionary:
-    src: '/home/jerin/code/ilmulti/extras/central.dict'
-    tgt: '/home/jerin/code/ilmulti/extras/central.dict'
+    src: '/root/src/ilmulti/resources/fairseq-dictionaries/vocab.dict'
+    tgt: '/root/src/ilmulti/resources/fairseq-dictionaries/vocab.dict'
+
+hard_coded_dict: {
+    'en': 4000,
+    'ta': 4000
+}

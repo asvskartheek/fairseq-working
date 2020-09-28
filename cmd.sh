@@ -1,7 +1,7 @@
 #!bin/bash
 
-module load python/3.7.0
-module load pytorch/1.1.0
+#module load python/3.7.0
+#module load pytorch/1.1.0
 
 IMPORTS=(
     filtered-iitb.tar
@@ -11,22 +11,22 @@ IMPORTS=(
     wat-ilmpc.tar
 )
 
-LOCAL_ROOT="/ssd_scratch/cvit/$USER"
+LOCAL_ROOT="/root/model_checkpoints/"
 REMOTE_ROOT="ada:/share1/dataset/text"
 
 
 mkdir -p $LOCAL_ROOT/{data,checkpoints}
 
-DATA=$LOCAL_ROOT/data
-CHECKPOINTS=$LOCAL_ROOT/ufal-transformer-big/checkpoints
+#DATA=$LOCAL_ROOT/data
+CHECKPOINTS=$LOCAL_ROOT/checkpoints
 
-function copy {
-    for IMPORT in ${IMPORTS[@]}; do
-        rsync --progress $REMOTE_ROOT/$IMPORT $DATA/
-        tar_args="$DATA/$IMPORT -C $DATA/"
-        tar -df $tar_args 2> /dev/null || tar -kxvf $tar_args
-    done
-}
+#function copy {
+#    for IMPORT in ${IMPORTS[@]}; do
+#        rsync --progress $REMOTE_ROOT/$IMPORT $DATA/
+#        tar_args="$DATA/$IMPORT -C $DATA/"
+#        tar -df $tar_args 2> /dev/null || tar -kxvf $tar_args
+#    done
+#}
 
 # copy
 export ILMULTI_CORPUS_ROOT=$DATA
@@ -45,8 +45,9 @@ function train {
         --dropout 0.1 --attention-dropout 0.1 --activation-dropout 0.1 \
         --ddp-backend no_c10d \
         --update-freq 2 \
+        --reset-optimizer \
+        --share-all-embeddings \
         config.yaml 
-        # --reset-optimizer \
 }
 
 function _test {
@@ -62,19 +63,21 @@ function _test {
         | sed 's/ //g' | sed 's/▁/ /g' | sed 's/^ //g' \
             > ufal-test.ref
 
+    # This number 2000 is the test set size.
+    # Change accordingly
     split -d -l 2000 ufal-test.hyp hyp.ufal.
     split -d -l 2000 ufal-test.ref ref.ufal.
 
     # perl multi-bleu.perl ref.ufal.00 < hyp.ufal.00 
     # perl multi-bleu.perl ref.ufal.01 < hyp.ufal.01 
 
-    python3 -m indicnlp.contrib.wat.evaluate \
-        --reference ref.ufal.00 --hypothesis hyp.ufal.00 
-    python3 -m indicnlp.contrib.wat.evaluate \
-        --reference ref.ufal.01 --hypothesis hyp.ufal.01 
+    python3 -m wateval.evaluate \
+        --references ref.ufal.00 --hypothesis hyp.ufal.00 
+    python3 -m wateval.evaluate \
+        --references ref.ufal.01 --hypothesis hyp.ufal.01 
 
 }
 
 ARG=$1
 eval "$1"
-# _test
+train

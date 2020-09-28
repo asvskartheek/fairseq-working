@@ -6,6 +6,7 @@ import yaml
 from multiprocessing import Pool
 from functools import partial
 import os
+from ilmulti.sentencepiece import SentencePieceTokenizer
 
 def read_config(path):
     with open(path) as config:
@@ -38,7 +39,7 @@ def get_pairs(data):
 def main(config_file, rebuild):
     data = read_config(config_file)
     corpora = get_pairs(data)
-    build_corpus_ = partial(build_corpus, rebuild=rebuild)
+    build_corpus_ = partial(build_corpus, config=data['hard_coded_dict'], rebuild=rebuild)
 
     # Create pool of processes eqvt to cores
     # Parallel call build_corpus on corpora
