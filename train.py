@@ -47,6 +47,14 @@ def main(args, init_distributed=False):
 
     # Build model and criterion
     model = task.build_model(args)
+    
+    # # Attempt Loading Weights -- Encoder Fine-Tuning
+    # model.encoder = torch.load('encoder_checkpoints/encoder_weights.pt')
+    # for p in model.parameters():
+    #     p.register_hook(lambda grad: torch.clamp(grad, -1.0, 1.0))
+    # for param in model.out_layer.parameters():
+    #     param.requires_grad = False
+    
     criterion = task.build_criterion(args)
     print(model)
     print('| model {}, criterion {}'.format(args.arch, criterion.__class__.__name__))
@@ -66,6 +74,23 @@ def main(args, init_distributed=False):
     # Load the latest checkpoint if one is available and restore the
     # corresponding train iterator
     extra_state, epoch_itr = checkpoint_utils.load_checkpoint(args, trainer)
+    
+    # state = checkpoint_utils.load_checkpoint_to_cpu("tuned_encoder_lin_no_grad_checkpoints/checkpoint_1_6000.pt")
+    
+    # filtered_state = []
+    
+    # for key in state['model'].keys():
+    #     filtered_state.append((key.replace('encoder.', ''), state['model'][key]))
+    
+    # filtered_state.pop()
+    # filtered_state.pop()
+    
+    # from collections import OrderedDict
+    # filtered_state_dict = OrderedDict(filtered_state)
+    
+    # model.encoder.load_state_dict(filtered_state_dict) #= torch.load("/home/wannabe/Documents/checkpoint_last.pt")
+    
+    # print ("Loaded Tuned Encoder Weights")
 
     # Train until the learning rate gets too small
     max_epoch = args.max_epoch or math.inf

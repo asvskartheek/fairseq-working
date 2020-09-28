@@ -3,7 +3,7 @@ import warnings
 from collections import namedtuple
 
 ENV_VAR='ILMULTI_CORPUS_ROOT'
-DATA_ROOT = "/content/drive/My Drive/IIIT-H RA/Assignment 2/WAT 2020/"
+DATA_ROOT = "/content/drive/My\ Drive/IIIT-H\ RA/Assignment\ 2/WAT\ 2020/"
 if DATA_ROOT is None:
     warnings.warn(
         "Please define {} in environment variable" .format(ENV_VAR)

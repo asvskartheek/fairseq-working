@@ -31,8 +31,8 @@ corpora:
     #     langs: ['en', 'ta']
 
 dictionary:
-    src: '/content/drive/My Drive/IIIT-H RA/Assignment 2/ilmulti/resources/fairseq-dictionaries/ilmulti-v1.dict.txt'
-    tgt: '/content/drive/My Drive/IIIT-H RA/Assignment 2/ilmulti/resources/fairseq-dictionaries/ilmulti-v1.dict.txt'
+    src: '/content/drive/My\ Drive/IIIT-H\ RA/Assignment\ 2/ilmulti/resources/fairseq-dictionaries/ilmulti-v1.dict.txt'
+    tgt: '/content/drive/My\ Drive/IIIT-H\ RA/Assignment\ 2/ilmulti/resources/fairseq-dictionaries/ilmulti-v1.dict.txt'
 
 hard_coded_dict: {
     'en': 4000,
