@@ -149,8 +149,10 @@ class CVITTranslationTask(FairseqTask):
                 data = yaml.load(contents)
                 return data
 
-        data = read_config(args.data)
-        # self.pairs = pairs_select(data['corpora'])
+        path = "/root/src/fairseq-ilmt/config.yaml"
+        data = read_config(path)
+        # self.pairs = pairs_select(data['corpo
+        # ra'])
 
         # src_dict = cls.load_dictionary(os.path.join(paths[0], 'dict.{}.txt'.format(args.source_lang)))
         # tgt_dict = cls.load_dictionary(os.path.join(paths[0], 'dict.{}.txt'.format(args.target_lang)))
@@ -181,7 +183,11 @@ class CVITTranslationTask(FairseqTask):
         src, tgt = self.args.source_lang, self.args.target_lang
 
         from ilmulti.sentencepiece import SentencePieceTokenizer
-        tokenizer = SentencePieceTokenizer()
+        tokenizer = SentencePieceTokenizer(self.data['hard_coded_dict'])
+
+        # tokenizer test
+        tokens = tokenizer("Hello World !", lang = 'en')
+
 
         self.datasets[split] = load_langpair_dataset(pairs, self.src_dict, tokenizer,
             combine=combine, dataset_impl=self.args.dataset_impl,
