@@ -77,6 +77,71 @@ def pairs_select(corpora_config, split):
     unique = sorted(unique, key=sort_key)
     return unique
 
+###################################### MONO PRETRAIN CODE ###########################################
+def pretrain_select(tags, splits, langs):
+    """
+    """
+    #TODO: Add Documentation and Comments
+    registry = dict([
+            (k, v)  \
+            for k, v in DATASET_REGISTRY.items() \
+            if k in tags
+    ])
+
+    filtered_corpora = []
+    for key in registry:
+        _splits, f = registry[key]
+        isplits = set(_splits).intersection(set(splits))
+        isplits = list(isplits)
+        for _split in isplits:
+            corpora = f(_split)
+
+            corpora = [
+                c for c in corpora \
+                if c.lang in langs
+            ]
+
+            filtered_corpora.extend(corpora)
+
+
+    def group_by_tag(corpora):
+        _dict = defaultdict(list)
+        for corpus in corpora:
+            _dict[corpus.tag].append(corpus)
+        return _dict
+
+    corpora = group_by_tag(filtered_corpora)
+    pairs = []
+
+    #TODO: Is this loop necessary
+    for key in corpora:
+        print ("This is the key", key)
+        print ("Corpora key", corpora[key])
+    
+    return corpora[key]
+
+def monoling_select(corpora_config, split):
+    """
+    """
+    #TODO: Add Documentation and Comments
+    ls = []
+    if split == 'valid': split = 'dev'
+    for tag, v in corpora_config.items():
+        tags = [tag]
+        if split in v['splits']:
+            splits = [split]
+            pairs = pretrain_select(tags, splits, v['langs'])
+            ls = pairs
+
+    # Set is non-determinism. Sort
+    def sort_key(pair):
+        first, second = pair
+        return (first.path, second.path)
+
+    unique = list(set(ls))
+    return unique[0]
+#######################################################################################################
+
 
 
 if __name__ == '__main__':

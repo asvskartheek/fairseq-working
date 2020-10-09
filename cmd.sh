@@ -17,8 +17,14 @@ REMOTE_ROOT="ada:/share1/dataset/text"
 
 mkdir -p $LOCAL_ROOT/{data,checkpoints}
 
-#DATA=$LOCAL_ROOT/data
-CHECKPOINTS=$LOCAL_ROOT/checkpoints
+DATA=$LOCAL_ROOT/data
+#CHECKPOINTS=$LOCAL_ROOT/checkpoints
+
+CHECKPOINTS_MT=$LOCAL_ROOT/ufal-transformer-big/transformer_checkpoints
+CHECKPOINTS_LM=$LOCAL_ROOT/ufal-transformer-big/encoder_checkpoints
+
+mkdir -p $CHECKPOINTS_MT
+mkdir -p $CHECKPOINTS_LM
 
 #function copy {
 #    for IMPORT in ${IMPORTS[@]}; do
@@ -32,7 +38,7 @@ CHECKPOINTS=$LOCAL_ROOT/checkpoints
 export ILMULTI_CORPUS_ROOT=$DATA
 
 set -x
-function train {
+function train_mt {
     python3 train.py \
         --task shared-multilingual-translation \
         --num-workers 0 \
@@ -48,6 +54,23 @@ function train {
         --reset-optimizer \
         --share-all-embeddings \
         config.yaml 
+}
+
+function train_lm {
+    python3 train.py \
+        --task pretrain_lang_modeling\
+        --num-workers 0 \
+        --arch encoder_lm\
+        --max-tokens 2000 --lr 1e-4 --min-lr 1e-9 \
+        --optimizer adam \
+        --save-dir $CHECKPOINTS_LM \
+        --log-format simple --log-interval 200 \
+        --criterion label_smoothed_cross_entropy \
+        --dropout 0.1 --attention-dropout 0.1 --activation-dropout 0.1 \
+        --ddp-backend no_c10d \
+        --update-freq 2 \
+        config.yaml 
+        #--reset-optimizer \
 }
 
 function _test {
