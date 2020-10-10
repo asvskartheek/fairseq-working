@@ -17,10 +17,25 @@ corpora:
     # national-newscrawl:
     #     splits: ['train']
     #     langs: ['en', 'hi']
-    ufal-en-tam:
-        splits: ['train', 'test', 'dev']
-        langs: ['en', 'ta']
+    #ufal-en-tam:
+    #    splits: ['train', 'test', 'dev']
+    #    langs: ['en', 'ta']
+    #pretrain-en-tam:
+    #    splits: ['train', 'dev']
+    #    langs: ['ta']
+    #ufal-en-or:
+    #    splits: ['train', 'dev', 'test']
+    #    langs: ['en', 'or']
+    pib-en-guj:
+        splits: ['train', 'dev', 'test']
+        langs: ['en', 'gu']
+    #pib-en-mar:
+    #    splits: ['train', 'dev', 'test']
+    #    langs: ['en', 'mr']
+    #complete-en-te:
+    #    splits: ['train', 'dev', 'test']
+    #    langs: ['en', 'te']
 
 dictionary:
-    src: '/home/jerin/code/ilmulti/extras/central.dict'
-    tgt: '/home/jerin/code/ilmulti/extras/central.dict'
+    src: '/content/drive/My Drive/RA-Project-IIIT-H/Assignment_2/ilmulti/resources/fairseq-dictionaries/ilmulti-v1.dict.txt'
+    tgt: '/content/drive/My Drive/RA-Project-IIIT-H/Assignment_2/ilmulti/resources/fairseq-dictionaries/ilmulti-v1.dict.txt'

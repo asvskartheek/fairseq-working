@@ -1,7 +1,7 @@
-#!bin/bash
+#!/bin/bash
 
-module load python/3.7.0
-module load pytorch/1.1.0
+#module load python/3.7.0
+#module load pytorch/1.1.0
 
 IMPORTS=(
     filtered-iitb.tar
@@ -11,22 +11,22 @@ IMPORTS=(
     wat-ilmpc.tar
 )
 
-LOCAL_ROOT="/ssd_scratch/cvit/$USER"
-REMOTE_ROOT="ada:/share1/dataset/text"
+LOCAL_ROOT='My Drive/RA-Project-IIIT-H/Assignment_2'
+#REMOTE_ROOT="ada:/share1/dataset/text"
+echo $LOCAL_ROOT
 
-
-mkdir -p $LOCAL_ROOT/{data,checkpoints}
+#mkdir -p "$LOCAL_ROOT"/{data,checkpoints}
 
 DATA=$LOCAL_ROOT/data
 CHECKPOINTS=$LOCAL_ROOT/ufal-transformer-big/checkpoints
 
-function copy {
-    for IMPORT in ${IMPORTS[@]}; do
-        rsync --progress $REMOTE_ROOT/$IMPORT $DATA/
-        tar_args="$DATA/$IMPORT -C $DATA/"
-        tar -df $tar_args 2> /dev/null || tar -kxvf $tar_args
-    done
-}
+#function copy {
+#    for IMPORT in ${IMPORTS[@]}; do
+#        rsync --progress $REMOTE_ROOT/$IMPORT $DATA/
+#        tar_args="$DATA/$IMPORT -C $DATA/"
+#        tar -df $tar_args 2> /dev/null || tar -kxvf $tar_args
+#    done
+#}
 
 # copy
 export ILMULTI_CORPUS_ROOT=$DATA
@@ -36,16 +36,20 @@ function train {
     python3 train.py \
         --task shared-multilingual-translation \
         --num-workers 0 \
-        --arch transformer \
+        --arch transformer\
         --max-tokens 5000 --lr 1e-4 --min-lr 1e-9 \
         --optimizer adam \
-        --save-dir $CHECKPOINTS \
+        --save-dir mar_finetuned_weights/ \
         --log-format simple --log-interval 200 \
         --criterion label_smoothed_cross_entropy \
-        --dropout 0.1 --attention-dropout 0.1 --activation-dropout 0.1 \
+        --dropout 0.3 --attention-dropout 0.3 --activation-dropout 0.3 \
         --ddp-backend no_c10d \
         --update-freq 2 \
-        config.yaml 
+        --seed 0 \
+        --save-interval-updates 2000 \
+        config.yaml
+        
+        #$DATA/uf-en-tam/corpus.bcn.train.en.processed.lmdb:$DATA/uf-en-tam/corpus.bcn.train.ta.processed.lmdb
         # --reset-optimizer \
 }
 
@@ -68,13 +72,13 @@ function _test {
     # perl multi-bleu.perl ref.ufal.00 < hyp.ufal.00 
     # perl multi-bleu.perl ref.ufal.01 < hyp.ufal.01 
 
-    python3 -m indicnlp.contrib.wat.evaluate \
-        --reference ref.ufal.00 --hypothesis hyp.ufal.00 
-    python3 -m indicnlp.contrib.wat.evaluate \
-        --reference ref.ufal.01 --hypothesis hyp.ufal.01 
+    #python3 -m indicnlp.contrib.wat.evaluate \
+    #    --reference ref.ufal.00 --hypothesis hyp.ufal.00 
+    #python3 -m indicnlp.contrib.wat.evaluate \
+    #    --reference ref.ufal.01 --hypothesis hyp.ufal.01 
 
 }
 
 ARG=$1
 eval "$1"
-# _test
+_test

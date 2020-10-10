@@ -37,18 +37,43 @@ def main(args, init_distributed=False):
 
     # Print args
     print(args)
-
+    
+    args.reset_optimizer = True
+    args.share_decoder_input_output_embed = True
+    
     # Setup task, e.g., translation, language modeling, etc.
     task = tasks.setup_task(args)
 
     # Load valid dataset (we load training data below, based on the latest checkpoint)
     for valid_sub_split in args.valid_subset.split(','):
         task.load_dataset(valid_sub_split, combine=False, epoch=0)
+    
+    print ("THIS WILL BREAK")
+    #state = checkpoint_utils.load_checkpoint_to_cpu("/content/drive/My Drive/RA-Project-IIIT-H/Assignment_2/fairseq-ilmt/tuned_encoder_lin_no_grad_checkpoints/checkpoint_8.pt")
 
     # Build model and criterion
     model = task.build_model(args)
+    
+    #filtered_state = []
+    #temp_list = []
+
+    #for key in state['model'].keys():
+    #    filtered_state.append((key, state['model'][key]))
+
+    #for key in model.state_dict().keys():
+    #    if (key.startswith('encoder.layer_norm') or key.startswith('out_layer')):
+    #        temp_list.append((key, model.state_dict()[key]))
+        
+    #filtered_state.extend(temp_list)
+
+    #filtered_state_dict = collections.OrderedDict(filtered_state)
+
+    #model.load_state_dict(filtered_state_dict)
+    
     criterion = task.build_criterion(args)
+    
     print(model)
+        
     print('| model {}, criterion {}'.format(args.arch, criterion.__class__.__name__))
     print('| num. model params: {} (num. trained: {})'.format(
         sum(p.numel() for p in model.parameters()),
@@ -66,8 +91,12 @@ def main(args, init_distributed=False):
     # Load the latest checkpoint if one is available and restore the
     # corresponding train iterator
     extra_state, epoch_itr = checkpoint_utils.load_checkpoint(args, trainer)
-
+    
+    #for param in model.out_layer.parameters():
+    #    param.requires_grad = False
+        
     # Train until the learning rate gets too small
+    args.max_epoch = 50
     max_epoch = args.max_epoch or math.inf
     max_update = args.max_update or math.inf
     lr = trainer.get_lr()

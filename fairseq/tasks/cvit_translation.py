@@ -149,7 +149,10 @@ class CVITTranslationTask(FairseqTask):
                 data = yaml.load(contents)
                 return data
 
-        data = read_config(args.data)
+        #data = read_config(args.data)
+        print (os.getcwd())
+        data = read_config("/content/drive/My Drive/RA-Project-IIIT-H/Assignment_2/fairseq-ilmt/config.yaml")
+        #data = {'corpora': {'ufal-en-tam': {'splits': ['train', 'test', 'dev'], 'langs': ['en', 'ta']}}, 'dictionary': {'src': '../ilmulti/resources/fairseq-dictionaries/vocab.dict',            #'tgt': 'ilmulti/resources/fairseq-dictionaries/vocab.dict'}}
         # self.pairs = pairs_select(data['corpora'])
 
         # src_dict = cls.load_dictionary(os.path.join(paths[0], 'dict.{}.txt'.format(args.source_lang)))
@@ -181,7 +184,12 @@ class CVITTranslationTask(FairseqTask):
         src, tgt = self.args.source_lang, self.args.target_lang
 
         from ilmulti.sentencepiece import SentencePieceTokenizer
-        tokenizer = SentencePieceTokenizer()
+        hard_code_dict = {
+        'en': 4000, 
+        'mr': 4000
+        }
+        
+        tokenizer = SentencePieceTokenizer(hard_code_dict)
 
         self.datasets[split] = load_langpair_dataset(pairs, self.src_dict, tokenizer,
             combine=combine, dataset_impl=self.args.dataset_impl,

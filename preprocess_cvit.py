@@ -6,39 +6,52 @@ import yaml
 from multiprocessing import Pool
 from functools import partial
 import os
-
+from ilmulti.sentencepiece import SentencePieceTokenizer
+    
+    
 def read_config(path):
     with open(path) as config:
         contents = config.read()
         data = yaml.load(contents)
         return data
 
-def build_corpus(corpus, rebuild=False):
-    from ilmulti.sentencepiece import SentencePieceTokenizer
-    tokenizer = SentencePieceTokenizer()
+def build_corpus(corpus, config, rebuild=False):
+    #print ("We above")
+    tokenizer = SentencePieceTokenizer(config)
+    print ("We below")
     if not LMDBCorpus.exists(corpus):
         print("LMDB({}) does not exist. Building".format(corpus.path))
         raw_dataset = _CVITIndexedRawTextDataset(corpus, tokenizer)
         writer = LMDBCorpusWriter(raw_dataset)
         writer.close()
         print("Built LMDB({})".format(corpus.path))
+    else:
+        print ("Heyo this is built already")
 
 
 def get_pairs(data):
     corpora = []
-    for split in ['train','dev','test']:
+    for split in ['train', 'dev', 'test']:
         pairs = pairs_select(data['corpora'], split) 
-        #print(pairs)
-        srcs,tgts = list(zip(*pairs))
-        corpora.extend(srcs)
-        corpora.extend(tgts)
-    
+        #pairs = monoling_select()
+        #print("pairs inside the preprocess file are", pairs)
+        if (pairs != []):
+            srcs,tgts = list(zip(*pairs))
+            corpora.extend(srcs)
+            corpora.extend(tgts)
+        
     return list(set(corpora))
 
 def main(config_file, rebuild):
     data = read_config(config_file)
+    print (data)
     corpora = get_pairs(data)
-    build_corpus_ = partial(build_corpus, rebuild=rebuild)
+    hard_code_dict = {
+    'en': 4000, 
+    'mr': 4000
+    }
+    
+    build_corpus_ = partial(build_corpus, config=hard_code_dict,  rebuild=rebuild)
 
     # Create pool of processes eqvt to cores
     # Parallel call build_corpus on corpora

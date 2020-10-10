@@ -95,6 +95,58 @@ def EenaduBacktrans_meta(split):
         corpus = Corpus('eenadu-en-te', data_abspath(sub_path), lang)
         corpora.append(corpus)
     return corpora
+    
+@dataset_register('pretrain-en-tam', ['train', 'dev'])
+def PretrainEnTam_meta(split):
+    corpora = []
+    for lang in ['en', 'ta']:
+        sub_path = 'pretrain-en-tam/{}.{}'.format(split, lang)
+        corpus = Corpus('pib-en-ta', data_abspath(sub_path), lang)
+        corpora.append(corpus)
+    return corpora
+    
+@dataset_register('ufal-en-or', ['train', 'dev', 'test'])
+def UFALEnOriya_meta(split):
+    #print ("This exeuctes when UFALEnTam_meta")
+    corpora = []
+    for lang in ['en', 'or']:
+        sub_path = 'ufal-en-or/{}.{}'.format(split, lang)
+        corpus = Corpus('ufal-en-or', data_abspath(sub_path), lang)
+        corpora.append(corpus)
+    #print ("From inside the corpora file", corpora)
+    return corpora
+
+@dataset_register('complete-en-te', ['train', 'dev', 'test'])
+def CompleteEnTe_meta(split):
+    corpora = []
+    for lang in ['en', 'te']:
+        sub_path = 'complete-en-te/{}.te-en.{}'.format(split, lang)
+        corpus = Corpus('complete-en-te', data_abspath(sub_path), lang)
+        corpora.append(corpus)
+    #print ("From the corpora file", corpora)
+    return corpora
+    
+@dataset_register('pib-en-mar', ['train', 'dev', 'test'])
+def PIBEnMar_meta(split):
+    corpora = []
+    for lang in ['en', 'mr']:
+        sub_path = 'pib-en-mar/{}.{}'.format(split, lang)
+        corpus = Corpus('pib-en-mar', data_abspath(sub_path), lang)
+        corpora.append(corpus)
+    #print ("From the corpora file", corpora)
+    return corpora
+    
+@dataset_register('pib-en-guj', ['train', 'dev', 'test'])
+def PIBEnGuj_meta(split):
+    corpora = []
+    for lang in ['en', 'gu']:
+        sub_path = 'pib-en-guj/{}.{}'.format(split, lang)
+        corpus = Corpus('pib-en-guj', data_abspath(sub_path), lang)
+        corpora.append(corpus)
+    #print ("From the corpora file", corpora)
+    return corpora
+
+
 
 if __name__ == '__main__':
     def merge(*_as):

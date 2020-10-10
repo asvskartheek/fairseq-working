@@ -435,3 +435,52 @@ class FairseqEncoderModel(BaseFairseqModel):
     def max_positions(self):
         """Maximum length supported by the model."""
         return self.encoder.max_positions()
+        
+class CVITLanguageModel(BaseFairseqModel):
+    """Base class for encoder-only models.
+
+    Args:
+        encoder (FairseqEncoder): the encoder
+    """
+
+    def __init__(self, encoder, out_layer):
+        super().__init__()
+        self.encoder = encoder
+        self.out_layer = out_layer
+        assert isinstance(self.encoder, FairseqEncoder)
+
+    def forward(self, src_tokens, src_lengths, **kwargs):
+        """
+        Run the forward pass for a encoder-only model.
+
+        Feeds a batch of tokens through the encoder to generate features.
+
+        Args:
+            src_tokens (LongTensor): input tokens of shape `(batch, src_len)`
+            src_lengths (LongTensor): source sentence lengths of shape `(batch)`
+
+        Returns:
+            the encoder's output, typically of shape `(batch, src_len, features)`
+        """
+        encoder_output = self.encoder(src_tokens, src_lengths, **kwargs)
+        linear_output = self.out_layer(encoder_output['encoder_out'])
+        return linear_output.unsqueeze(0)
+
+    def get_normalized_probs(self, net_output, log_probs, sample=None):
+        """Get normalized probabilities (or log probs) from a net's output."""
+        if torch.is_tensor(net_output):
+            logits = net_output.float()
+            #print ("This is the logits size", logits.size())
+            if log_probs:
+                return F.log_softmax(logits, dim=-1)
+            else:
+                return F.softmax(logits, dim=-1)
+        raise NotImplementedError
+
+    def max_positions(self):
+        """Maximum length supported by the model."""
+        return self.encoder.max_positions()
+
+    @property
+    def supported_targets(self):
+        return {'future'}
