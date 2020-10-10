@@ -11,14 +11,14 @@ IMPORTS=(
     wat-ilmpc.tar
 )
 
-LOCAL_ROOT="/root/model_checkpoints/"
+LOCAL_ROOT=".."
 REMOTE_ROOT="ada:/share1/dataset/text"
 
 
 mkdir -p $LOCAL_ROOT/{data,checkpoints}
 
 DATA=$LOCAL_ROOT/data
-#CHECKPOINTS=$LOCAL_ROOT/checkpoints
+CHECKPOINTS=$LOCAL_ROOT/checkpoints
 
 CHECKPOINTS_MT=$LOCAL_ROOT/ufal-transformer-big/transformer_checkpoints
 CHECKPOINTS_LM=$LOCAL_ROOT/ufal-transformer-big/encoder_checkpoints
@@ -103,4 +103,4 @@ function _test {
 
 ARG=$1
 eval "$1"
-train
+train_mt

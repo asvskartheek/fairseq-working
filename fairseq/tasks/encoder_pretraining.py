@@ -126,7 +126,7 @@ class CVITPretrainingTask(FairseqTask):
         #         output_dictionary = TruncatedDictionary(dictionary, args.output_dictionary_size)
 
         ######################### CHANGE THIS #################################################
-        args.data = read_config("/root/src/fairseq-ilmt/config.yaml")
+        args.data = read_config("/content/drive/My Drive/IIIT-H RA/ICON/fairseq-working/config.yaml")
         ########################################################################################
         if (args.data):
             path = args.data['dictionary']['src']

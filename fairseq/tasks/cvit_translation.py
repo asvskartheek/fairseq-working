@@ -149,7 +149,7 @@ class CVITTranslationTask(FairseqTask):
                 data = yaml.load(contents)
                 return data
 
-        path = "/root/src/fairseq-ilmt/config.yaml"
+        path = "/content/drive/My Drive/IIIT-H RA/ICON/fairseq-working/config.yaml"
         data = read_config(path)
         # self.pairs = pairs_select(data['corpo
         # ra'])
@@ -186,7 +186,7 @@ class CVITTranslationTask(FairseqTask):
         tokenizer = SentencePieceTokenizer(self.data['hard_coded_dict'])
 
         # tokenizer test
-        tokens = tokenizer("Hello World !", lang = 'en')
+        # tokens = tokenizer("Hello World !", lang = 'en')
 
 
         self.datasets[split] = load_langpair_dataset(pairs, self.src_dict, tokenizer,
