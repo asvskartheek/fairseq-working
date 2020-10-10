@@ -96,6 +96,15 @@ def EenaduBacktrans_meta(split):
         corpora.append(corpus)
     return corpora
 
+@dataset_register('complete-en-ml', ['train', 'dev', 'test'])
+def CompleteEnMl_meta(split):
+    corpora = []
+    for lang in ['en', 'ml']:
+        sub_path = 'complete-en-ml/{}.ml-en.{}'.format(split, lang)
+        corpus = Corpus('complete-en-ml', data_abspath(sub_path), lang)
+        corpora.append(corpus)
+    return corpora
+
 if __name__ == '__main__':
     def merge(*_as):
         _ase = []

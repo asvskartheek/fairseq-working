@@ -17,15 +17,18 @@ corpora:
     # national-newscrawl:
     #     splits: ['train']
     #     langs: ['en', 'hi']
-    ufal-en-tam:
-        splits: ['train', 'test', 'dev']
-        langs: ['en', 'ta']
+    # ufal-en-tam:
+    #     splits: ['train', 'test', 'dev']
+    #     langs: ['en', 'ta']
     # mechturk-en-te:
     #     splits: ['train', 'dev', 'test']
     #     langs: ['en', 'te']
     # complete-en-te:
     #     splits: ['train', 'dev', 'test']
     #     langs: ['en', 'te']
+    complete-en-ml:
+        splits: ['train', 'dev', 'test']
+        langs: ['en', 'ml']
     # pretrain-en-tam:
     #     splits: ['train', 'dev']
     #     langs: ['en', 'ta']
