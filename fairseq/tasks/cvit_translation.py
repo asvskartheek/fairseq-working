@@ -149,7 +149,7 @@ class CVITTranslationTask(FairseqTask):
                 data = yaml.load(contents)
                 return data
 
-        path = "/content/drive/My Drive/IIIT-H RA/ICON/fairseq-working/config.yaml"
+        path = "/home2/asvs/fairseq-working/config.yaml"
         data = read_config(path)
         # self.pairs = pairs_select(data['corpo
         # ra'])
