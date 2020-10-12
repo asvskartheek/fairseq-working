@@ -11,8 +11,8 @@ IMPORTS=(
     wat-ilmpc.tar
 )
 
-LOCAL_ROOT=".."
-REMOTE_ROOT="ada:/share1/dataset/text"
+LOCAL_ROOT="/ssd_scratch/cvit/$USER"
+REMOTE_ROOT="/home2/$USER"
 
 
 mkdir -p $LOCAL_ROOT/{data,checkpoints}

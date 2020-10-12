@@ -10,7 +10,7 @@ DATA=$LOCAL_ROOT/data
 CHECKPOINTS=$LOCAL_ROOT/checkpoints
 RESULTS=$LOCAL_ROOT/results
 
-rsync -rvz $REMOTE_ROOT/checkpoints/checkpoint_best.pt $CHECKPOINTS/
+rsync -rvz $REMOTE_ROOT/checkpoints/checkpoint_{last,best}.pt $CHECKPOINTS/
 
 # IMPORT=directory.tar.xz
 rsync --progress $REMOTE_ROOT/datasets/$IMPORT $DATA/
@@ -30,30 +30,22 @@ function _backtranslate {
         --path $CHECKPOINTS/checkpoint_best.pt > $RESULTS/backtranslated.txt
 }
 
-ARCH='transformer'
-MAX_TOKENS=3500
-LR=1e-3
-UPDATE_FREQ=4
-MAX_EPOCHS=200
-
-function train {
+function train_mt {
     python3 train.py \
         --task shared-multilingual-translation \
-        --share-all-embeddings \
         --num-workers 0 \
-        --arch $ARCH \
-        --max-tokens $MAX_TOKENS --lr $LR --min-lr 1e-9 \
-        --optimizer adam --adam-betas '(0.9, 0.98)' \
+        --arch transformer \
+        --max-tokens 5000 --lr 1e-4 --min-lr 1e-9 \
+        --optimizer adam \
         --save-dir $CHECKPOINTS \
         --log-format simple --log-interval 200 \
-        --dropout 0.1 --attention-dropout 0.1 --activation-dropout 0.1 \
-        --lr-scheduler inverse_sqrt \
-        --clip-norm 0.1 \
-        --ddp-backend no_c10d \
-        --update-freq $UPDATE_FREQ \
-        --max-epoch $MAX_EPOCHS \
         --criterion label_smoothed_cross_entropy \
-        config.yaml
+        --dropout 0.1 --attention-dropout 0.1 --activation-dropout 0.1 \
+        --ddp-backend no_c10d \
+        --update-freq 2 \
+        --reset-optimizer \
+        --share-all-embeddings \
+        config.yaml 
 }
 
-train
+train_mt
