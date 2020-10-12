@@ -186,8 +186,7 @@ class CVITTranslationTask(FairseqTask):
         tokenizer = SentencePieceTokenizer(self.data['hard_coded_dict'])
 
         # tokenizer test
-        # tokens = tokenizer("Hello World !", lang = 'en')
-
+        tokens = tokenizer("Hello World !", lang = 'en')
 
         self.datasets[split] = load_langpair_dataset(pairs, self.src_dict, tokenizer,
             combine=combine, dataset_impl=self.args.dataset_impl,
