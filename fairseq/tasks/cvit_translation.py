@@ -40,9 +40,9 @@ def load_langpair_dataset(
         tgt_datasets.append(y)
 
         # src -> tgt
-        x, y = wrapped(tgt, src)
-        src_datasets.append(x)
-        tgt_datasets.append(y)
+        # x, y = wrapped(tgt, src)
+        # src_datasets.append(x)
+        # tgt_datasets.append(y)
 
     if len(src_datasets) == 1:
         src_dataset, tgt_dataset = src_datasets[0], tgt_datasets[0]

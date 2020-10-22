@@ -105,6 +105,15 @@ def CompleteEnMl_meta(split):
         corpora.append(corpus)
     return corpora
 
+@dataset_register('pib-en-mar', ['train','dev','test'])
+def PibEnMar_meta(split):
+    corpora = []
+    for lang in ['en','mr']: 
+        sub_path = 'pib-en-mar/{}.mr-en.{}'.format(split, lang)
+        corpus = Corpus('pib-en-mr', data_abspath(sub_path), lang)
+        corpora.append(corpus)
+    return corpora
+
 if __name__ == '__main__':
     def merge(*_as):
         _ase = []

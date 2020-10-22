@@ -29,6 +29,9 @@ corpora:
     complete-en-ml:
         splits: ['train', 'dev', 'test']
         langs: ['en', 'ml']
+    # pib-en-mar:
+    #    splits: ['train','dev','test']
+    #    langs: ['en','mr']
     # pretrain-en-tam:
     #     splits: ['train', 'dev']
     #     langs: ['en', 'ta']
